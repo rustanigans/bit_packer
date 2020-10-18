@@ -1,15 +1,17 @@
-use crate::{PackedBits, Push};
+use crate::{PackedBits};
 
-pub trait BitPackerInternal<U>
-{
-    fn add_to_packed_bits(self, bits: &mut U);
+pub trait BitPacker {
+    fn add_to_packed_bits(self, bits: &mut PackedBits);
 }
 
-impl<T, U: Push<T>> BitPackerInternal<U> for T
-{
-    fn add_to_packed_bits(self, bits: &mut U) { bits.push(self) }
+pub trait PPush<T> {
+    fn push(&mut self, val: T) ;
 }
 
-pub trait BitPacker: BitPackerInternal<PackedBits>
+impl<T> PPush<T> for PackedBits
+    where T: BitPacker
 {
+    fn push(&mut self, val: T) {
+        val.add_to_packed_bits(self)
+    }
 }
