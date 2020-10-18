@@ -9,3 +9,4 @@ pub use impls::packed_bits::PackedBits;
 pub use impls::uint_range_def::UIntRangeDef;
 pub use traits::push::Push;
 pub use traits::range_def::RangeDef;
+pub use traits::bit_packer::BitPacker;
