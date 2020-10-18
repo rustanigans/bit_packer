@@ -3,6 +3,10 @@ mod impls;
 mod impls_for;
 mod new_types;
 mod traits;
+mod utils;
+
+#[cfg(test)]
+mod tests;
 
 pub use bare_structs::no_bits::NoBits;
 pub use impls::packed_bits::PackedBits;
