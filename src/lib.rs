@@ -4,6 +4,7 @@ mod impls_for;
 mod new_types;
 mod traits;
 mod utils;
+mod unions;
 
 #[cfg(test)]
 mod tests;
