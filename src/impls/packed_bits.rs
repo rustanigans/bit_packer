@@ -35,8 +35,9 @@ impl PackedBits
 
     pub fn add_byte(&mut self, byte: u8) { self.bytes.push(byte); }
 
-    pub fn append(&mut self, bytes: &mut Vec<u8>, mut trailing_zeros: usize)
+    pub fn append(&mut self, bytes: &Vec<u8>, mut trailing_zeros: usize)
     {
+        let bytes = &mut bytes.to_vec();
         let len = self.bytes.len();
         if bytes.len() == 0
         {
