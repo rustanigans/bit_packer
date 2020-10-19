@@ -52,9 +52,9 @@ impl<T: BitPacker> BitPacker for Packet<T>
 {
     fn add_to_packed_bits(&self, bits: &mut PackedBits)
     {
-        bits.push(self.header.protocol_id);
-        bits.push(self.header.sequence_number);
-        self.payload.add_to_packed_bits(bits);
+        bits.push(&self.header.protocol_id);
+        bits.push(&self.header.sequence_number);
+        bits.push(&self.payload);
         //bits.push( );
     }
 }
@@ -91,10 +91,9 @@ impl BitPacker for DataPacketPayload
 {
     fn add_to_packed_bits(&self, bits: &mut PackedBits)
     {
-        bits.push(self.payload_type);
+        bits.push(&self.payload_type);
 
-        self.data.as_ref().unwrap().add_to_packed_bits(bits);
-        //bits.push(self.data.unwrap());
+        bits.push(self.data.as_ref().unwrap());
     }
 }
 
