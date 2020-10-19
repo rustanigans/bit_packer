@@ -1,6 +1,12 @@
-pub mod uint_range_def_struct;
+pub struct UIntRangeDef<T>
+{
+    pub(super) min: T,
 
-pub use uint_range_def_struct::UIntRangeDef;
+    // Only need this for checks
+    pub(super) max: T,
+
+    pub(super) zeros: u32,
+}
 
 impl<T> UIntRangeDef<T> {
     pub fn new(min:T, max:T) -> Self

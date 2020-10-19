@@ -1,8 +1,14 @@
-mod packed_bit_struct;
 use crate::utils::{shift_left::shift_left, shift_right::shift_right};
-pub use packed_bit_struct::PackedBits;
-use std::ops::Div;
-use std::borrow::BorrowMut;
+
+pub mod impl_from_bytes;
+pub mod impl_from_bytes_and_trailing_zeros_tuple;
+pub mod impl_push;
+
+pub struct PackedBits
+{
+    trailing_zeros: usize,
+    bytes: Vec<u8>,
+}
 
 impl PackedBits
 {

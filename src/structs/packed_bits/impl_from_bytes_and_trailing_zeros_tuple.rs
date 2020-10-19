@@ -1,4 +1,4 @@
-use crate::PackedBits;
+use super::PackedBits;
 
 impl From<(Vec<u8>, usize)> for PackedBits
 {
