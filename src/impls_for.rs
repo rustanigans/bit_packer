@@ -1,2 +1,2 @@
-pub mod u8_to_u128;
-pub mod vec_u8;
+pub mod bit_packer_for_u8_to_u128;
+pub mod bit_packer_for_vec_u8;
