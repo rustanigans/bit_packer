@@ -13,10 +13,10 @@ macro_rules! impl_for{
             impl BitPacker for $i {
                 fn add_to_packed_bits(&self, bits: &mut PackedBits) {
                     let mut be_bytes = self.to_be_bytes();
-                    &mut unsafe {
+                    bits.append(&mut unsafe {
                         Vec::from_raw_parts(
                             be_bytes.as_mut_ptr(), $n, $n)
-                    }.add_to_packed_bits(bits);
+                    },0);
                 }
             }
         )*
