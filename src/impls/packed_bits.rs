@@ -1,6 +1,8 @@
 mod packed_bit_struct;
 use crate::utils::{shift_left::shift_left, shift_right::shift_right};
 pub use packed_bit_struct::PackedBits;
+use std::ops::Div;
+use std::borrow::BorrowMut;
 
 impl PackedBits
 {
@@ -56,5 +58,21 @@ impl PackedBits
             *last = *last | trim;
         }
         self.bytes.append(bytes);
+    }
+
+    pub fn take_bits(&mut self, count: usize) -> Vec<u8> {
+        let whole_bytes = count / 8;
+        let mut bytes = self.bytes.split_off(whole_bytes);
+        std::mem::swap(&mut self.bytes, &mut bytes);
+        let leftover = count - whole_bytes * 8;
+        if leftover == 0
+        {
+            return bytes;
+        }
+        let (mut trim, tz) = shift_left(&mut self.bytes, leftover, self.trailing_zeros);
+        self.trailing_zeros = tz;
+        trim = trim << 8-leftover;
+        bytes.push(trim);
+        bytes
     }
 }
