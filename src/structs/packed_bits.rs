@@ -1,4 +1,5 @@
 use crate::utils::{shift_left::shift_left, shift_right::shift_right};
+use crate::BitPacker;
 
 pub mod impl_from_bytes;
 pub mod impl_from_bytes_and_trailing_zeros_tuple;
@@ -19,6 +20,7 @@ impl PackedBits
             bytes: vec![],
         }
     }
+
     pub fn from_bytes_and_tz(bytes: Vec<u8>, trailing_zeros: usize) -> Self
     {
         PackedBits {
@@ -35,11 +37,18 @@ impl PackedBits
         }
     }
 
+    pub fn into_bytes(mut self) -> Vec<u8>
+    {
+        self.bytes
+    }
+
     pub fn trailing_zeros(&self) -> usize { self.trailing_zeros }
 
     pub fn bytes(&self) -> &[u8] { &self.bytes[..] }
 
     pub fn add_byte(&mut self, byte: u8) { self.bytes.push(byte); }
+
+    pub fn take_byte(&mut self) -> u8 { self.bytes.remove(0) }
 
     pub fn append(&mut self, bytes: &mut Vec<u8>, mut trailing_zeros: usize)
     {
@@ -64,6 +73,12 @@ impl PackedBits
             *last = *last | trim;
         }
         self.bytes.append(bytes);
+    }
+
+    pub fn shift<T: BitPacker + Default>(&mut self) -> T {
+        let mut val = T::default();
+        val.extract_from_packed_bits(self);
+        val
     }
 
     pub fn take_bits(&mut self, count: usize) -> Vec<u8> {

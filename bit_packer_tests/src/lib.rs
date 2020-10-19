@@ -57,6 +57,10 @@ impl<T: BitPacker> BitPacker for Packet<T>
         bits.push(&self.payload);
         //bits.push( );
     }
+
+    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits) {
+        self.header.protocol_id = bits.shift();
+    }
 }
 
 struct ControlPacketPayload<T>
@@ -95,6 +99,10 @@ impl BitPacker for DataPacketPayload
 
         bits.push(self.data.as_ref().unwrap());
     }
+
+    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits) {
+        unimplemented!()
+    }
 }
 
 impl Default for DataPacketPayload
@@ -110,6 +118,10 @@ struct SnapshotPayload
 impl BitPacker for SnapshotPayload
 {
     fn add_to_packed_bits(&self, bits: &mut PackedBits) { unimplemented!() }
+
+    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits) {
+        unimplemented!()
+    }
 }
 
 struct SnapshotHeader
@@ -176,8 +188,7 @@ fn builder_test()
     {
         pkt.header.sequence_number = i;
 
-        let mut pb = PackedBits::new();
-        pkt.add_to_packed_bits(&mut pb);
+        let bytes = pkt.pack();
         //send_data(pb.bytes());
     }
 }
