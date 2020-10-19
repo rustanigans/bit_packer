@@ -1,5 +1,7 @@
 use crate::{BitPacker, PackedBits};
 
+// TODO Tests required
+
 impl BitPacker for u8
 {
     fn add_to_packed_bits(self, bits: &mut PackedBits) { bits.add_byte(self); }
@@ -10,9 +12,10 @@ macro_rules! impl_for{
         $(
             impl BitPacker for $i {
                 fn add_to_packed_bits(self, bits: &mut PackedBits) {
+                    let mut be_bytes = self.to_be_bytes();
                     &mut unsafe {
                         Vec::from_raw_parts(
-                            self.to_be_bytes().as_mut_ptr(), $n, $n)
+                            be_bytes.as_mut_ptr(), $n, $n)
                     }.add_to_packed_bits(bits);
                 }
             }
