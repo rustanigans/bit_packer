@@ -13,6 +13,7 @@ mod tests;
 pub use bare_structs::no_bits::NoBits;
 pub use impls::packed_bits::PackedBits;
 pub use impls::uint_range_def::UIntRangeDef;
+pub use impls::int_range_def::IntRangeDef;
 pub use traits::push::Push;
 pub use traits::range_def::RangeDef;
 pub use traits::bit_packer::BitPacker;
