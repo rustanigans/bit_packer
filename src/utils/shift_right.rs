@@ -7,6 +7,7 @@ pub(crate) fn shift_right(bytes: &mut Vec<u8>, mut count: usize, mut trailing_ze
 
     let pad_whole_bytes = count / 8;
     count -= pad_whole_bytes * 8;
+
     {
         let mut new_bytes = vec![0u8; pad_whole_bytes];
         new_bytes.append(bytes);

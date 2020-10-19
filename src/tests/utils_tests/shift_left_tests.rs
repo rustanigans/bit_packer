@@ -2,7 +2,7 @@ use crate::utils::shift_left::shift_left;
 
 macro_rules! shift_test
 {
-    ($($n:ident, $in:expr, $count:expr,$tz:expr, $expected_trim:expr, $expected_tz:expr, $expected_remainder:expr)*) =>
+    ($($n:ident, $in:expr, $count:expr, $tz:expr, $expected_trim:expr, $expected_tz:expr, $expected_remainder:expr)*) =>
     {
         $(
             #[test]
