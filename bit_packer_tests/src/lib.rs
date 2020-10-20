@@ -38,10 +38,10 @@ impl BitPacker for NetPacketHeader
 
     fn extract_from_packed_bits(&mut self, bits: &mut PackedBits)
     {
-        bits.shift(Box::new(self.protocol_id));
-        bits.shift(Box::new(self.packet_type));
-        bits.shift(Box::new(self.sequence_number));
-        bits.shift(Box::new(self.confirmed_number))
+        bits.shift(&mut self.protocol_id);
+        bits.shift(&mut self.packet_type);
+        bits.shift(&mut self.sequence_number);
+        bits.shift(&mut self.confirmed_number)
     }
 }
 
@@ -84,7 +84,7 @@ impl BitPacker for NetPacket
 
     fn extract_from_packed_bits(&mut self, bits: &mut PackedBits)
     {
-        bits.shift(  Box::new(self.header));
+        bits.shift(  &mut self.header);
 
         self.payload = Incoming(Box::new(bits.swap_empty()));
     }
@@ -129,7 +129,7 @@ impl BitPacker for DataPacketPayload
 
     fn extract_from_packed_bits(&mut self, bits: &mut PackedBits)
     {
-        bits.shift( Box::new(self.payload_type ));
+        bits.shift( &mut self.payload_type );
 
         self.data = Incoming(Box::new(bits.swap_empty()));
     }
@@ -217,7 +217,7 @@ fn incoming_builder_test() {
 
     match pkt.payload {
         Incoming(mut payload) => {
-            payload.shift(Box::new(packet_payload))
+            payload.shift(&mut packet_payload)
         }
         _ => {panic!()}
     }
