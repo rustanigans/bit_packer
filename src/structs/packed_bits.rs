@@ -37,7 +37,7 @@ impl PackedBits
         }
     }
 
-    pub fn into_bytes(mut self) -> Vec<u8>
+    pub fn into_bytes(self) -> Vec<u8>
     {
         self.bytes
     }
