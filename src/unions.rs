@@ -1,6 +1,6 @@
-union UnsignedSigned<U,S>
+pub(crate) union UnsignedSigned<U,S>
 where U: Copy, S: Copy
 {
-    unsigned:U,
-    signed:S
+    pub(crate) unsigned:U,
+    pub(crate) signed:S
 }
