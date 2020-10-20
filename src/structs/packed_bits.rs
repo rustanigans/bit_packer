@@ -23,6 +23,12 @@ impl PackedBits
         }
     }
 
+    pub fn swap_empty(&mut self) -> PackedBits {
+        let mut n = PackedBits::new();
+        std::mem::swap(&mut n, self);
+        n
+    }
+
     pub fn from_bytes_and_tz(bytes: Vec<u8>, trailing_zeros: usize) -> Self
     {
         PackedBits {
