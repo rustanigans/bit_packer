@@ -1,8 +1,9 @@
 extern crate bit_packer;
 
-use bit_packer::{BitPacker, PackedBits, Push};
-use std::{borrow::BorrowMut, rc::Rc};
+use bit_packer::*;
+use crate::PacketPayloadOption::{Incoming, Outgoing};
 
+#[derive(Copy, Clone)]
 struct NetPacketHeader
 {
     protocol_id: u32,
@@ -25,51 +26,77 @@ impl NetPacketHeader
     }
 }
 
+impl BitPacker for NetPacketHeader
+{
+    fn add_to_packed_bits(&self, bits: &mut PackedBits)
+    {
+        bits.push(&self.protocol_id);
+        bits.push(&self.packet_type);
+        bits.push(&self.sequence_number);
+        bits.push(&self.confirmed_number);
+    }
+
+    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits)
+    {
+        bits.shift(Box::new(self.protocol_id));
+        bits.shift(Box::new(self.packet_type));
+        bits.shift(Box::new(self.sequence_number));
+        bits.shift(Box::new(self.confirmed_number))
+    }
+}
+
 trait Newable
 {
     fn new() -> Self;
 }
 
-struct Packet<Coffee>
+pub enum PacketPayloadOption
+{
+    None,
+    Outgoing(Box<dyn BitPacker>),
+    Incoming(Box<dyn Shift>),
+}
+
+impl Default for PacketPayloadOption
+{
+    fn default() -> Self { PacketPayloadOption::None }
+}
+
+struct NetPacket
 {
     header: NetPacketHeader,
-    payload: Coffee,
+    payload: PacketPayloadOption,
 }
 
-impl<T> Packet<T>
-where T: BitPacker + Default
-{
-    pub fn new() -> Packet<T>
-    {
-        Packet {
-            header: NetPacketHeader::default(),
-            payload: T::default(),
-        }
-    }
-}
+impl NetPacket {}
 
-impl<T: BitPacker> BitPacker for Packet<T>
+impl BitPacker for NetPacket
 {
     fn add_to_packed_bits(&self, bits: &mut PackedBits)
     {
-        bits.push(&self.header.protocol_id);
-        bits.push(&self.header.sequence_number);
-        bits.push(&self.payload);
-        //bits.push( );
+        bits.push(&self.header);
+        match &self.payload
+        {
+            PacketPayloadOption::Outgoing(payload) => bits.push(payload),
+            _ => panic!(),
+        }
     }
 
-    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits) {
-        self.header.protocol_id = bits.shift();
+    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits)
+    {
+        bits.shift(  Box::new(self.header));
+
+        self.payload = Incoming(Box::new(bits.swap_empty()));
     }
 }
 
-struct ControlPacketPayload<T>
+struct ControlPacketPayload
 {
     // Connect/Disconnect/Reject/Accept/Ack etc..
-    command: u8,
+    control_command: u8,
     // None, something else if required, like auth token
-    control_data_type: u8,
-    control_data: T,
+    //  control_data_type: u8,
+    control_command_data: PacketPayloadOption,
 }
 
 struct Ack
@@ -88,7 +115,7 @@ struct DataPacketPayload
 {
     payload_type: u8,
     // Snapshot, Event, others...
-    data: Option<Box<dyn BitPacker>>,
+    data: PacketPayloadOption,
 }
 
 impl BitPacker for DataPacketPayload
@@ -97,11 +124,14 @@ impl BitPacker for DataPacketPayload
     {
         bits.push(&self.payload_type);
 
-        bits.push(self.data.as_ref().unwrap());
+        //bits.push(&self.data);
     }
 
-    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits) {
-        unimplemented!()
+    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits)
+    {
+        bits.shift( Box::new(self.payload_type ));
+
+        self.data = Incoming(Box::new(bits.swap_empty()));
     }
 }
 
@@ -119,9 +149,7 @@ impl BitPacker for SnapshotPayload
 {
     fn add_to_packed_bits(&self, bits: &mut PackedBits) { unimplemented!() }
 
-    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits) {
-        unimplemented!()
-    }
+    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits)  { unimplemented!() }
 }
 
 struct SnapshotHeader
@@ -129,36 +157,33 @@ struct SnapshotHeader
     snapshot_list: Vec<(u8, u8)>, // u8 SnapshotType, u8 Count
 }
 
-#[test]
-fn new_packet() { let pkt = Packet::<DataPacketPayload>::new(); }
-
 impl Default for NetPacketHeader
 {
     fn default() -> Self { unimplemented!() }
 }
 
-impl<T: Default> Default for Packet<T>
+impl Default for NetPacket
 {
     fn default() -> Self
     {
-        Packet {
+        NetPacket {
             header: NetPacketHeader::default(),
-            payload: T::default(),
+            payload: PacketPayloadOption::default(),
         }
     }
 }
 
-struct NetPacketBuilder<T>
+struct NetPacketBuilder
 {
-    pkt: Packet<T>,
+    pkt: NetPacket,
 }
 
-impl<T: BitPacker + Default> NetPacketBuilder<T>
+impl NetPacketBuilder
 {
-    pub fn new() -> NetPacketBuilder<T>
+    pub fn new() -> NetPacketBuilder
     {
         NetPacketBuilder {
-            pkt: Packet::default(),
+            pkt: NetPacket::default(),
         }
     }
 
@@ -168,11 +193,37 @@ impl<T: BitPacker + Default> NetPacketBuilder<T>
         self
     }
 
-    pub fn with_payload(mut self, val: T) -> Self
+    pub fn with_payload(mut self, val: PacketPayloadOption) -> Self
     {
         self.pkt.payload = val;
         self
     }
+
+    pub fn from_buff(buff: Vec<u8>) -> NetPacket {
+        let mut pkt = NetPacket::default();
+        pkt.unpack(buff);
+        pkt
+    }
+}
+
+
+#[test]
+fn incoming_builder_test() {
+    let buff:Vec<u8> = vec![];
+    let pkt = NetPacketBuilder::from_buff(buff);
+
+
+    let mut packet_payload =  DataPacketPayload::default();
+
+    match pkt.payload {
+        Incoming(mut payload) => {
+            payload.shift(Box::new(packet_payload))
+        }
+        _ => {panic!()}
+    }
+    //packet_payload.payload_type.
+
+
 }
 
 #[test]
@@ -181,7 +232,7 @@ fn builder_test()
     let payload = DataPacketPayload::default();
     let mut pkt = NetPacketBuilder::new()
         .with_header(NetPacketHeader::default())
-        .with_payload(payload)
+        .with_payload(Outgoing(Box::new(payload)))
         .pkt;
 
     for i in 1..100
@@ -192,3 +243,4 @@ fn builder_test()
         //send_data(pb.bytes());
     }
 }
+
