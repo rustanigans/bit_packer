@@ -34,8 +34,9 @@ macro_rules! impl_for {
                 }
 
                 fn extract_from_packed_bits(&mut self, bits: &mut PackedBits) {
-                    let val = UnsignedSigned::<$i, $u> { signed:  bits.shift() };
+                    let mut val = UnsignedSigned::<$i, $u> { signed: 0 };
                     unsafe {
+                        bits.shift(&mut val.signed);
                         *self = val.unsigned;
                     }
                 }
@@ -47,21 +48,3 @@ macro_rules! impl_for {
 impl_for!(
     i16:u16 i32:u32 i64:u64 i128:u128
 );
-
-/*impl BitPacker for i16
-{
-    fn add_to_packed_bits(&self, bits: &mut PackedBits)
-    {
-        let val = UnsignedSigned::<i16, u16> { unsigned: *self };
-        unsafe {
-            bits.push(&val.signed);
-        }
-    }
-
-    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits) {
-        let val = UnsignedSigned::<i16, u16> { signed: bits.shift() };
-        unsafe {
-            *self = val.unsigned;
-        }
-    }
-}*/
