@@ -15,3 +15,4 @@ pub use structs::int_range_def::IntRangeDef;
 pub use traits::push::Push;
 pub use traits::range_def::RangeDef;
 pub use traits::bit_packer::BitPacker;
+pub use traits::shift::Shift;

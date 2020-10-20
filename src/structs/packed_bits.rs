@@ -4,6 +4,7 @@ use crate::BitPacker;
 pub mod impl_from_bytes;
 pub mod impl_from_bytes_and_trailing_zeros_tuple;
 pub mod impl_push;
+pub mod impl_shift;
 
 pub struct PackedBits
 {
@@ -13,6 +14,7 @@ pub struct PackedBits
 
 impl PackedBits
 {
+    // TODO Default Impl
     pub fn new() -> Self
     {
         PackedBits {
@@ -73,12 +75,6 @@ impl PackedBits
             *last = *last | trim;
         }
         self.bytes.append(bytes);
-    }
-
-    pub fn shift<T: BitPacker + Default>(&mut self) -> T {
-        let mut val = T::default();
-        val.extract_from_packed_bits(self);
-        val
     }
 
     pub fn take_bits(&mut self, count: usize) -> Vec<u8> {

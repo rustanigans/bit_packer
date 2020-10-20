@@ -1,4 +1,5 @@
 use crate::{unions::UnsignedSigned, BitPacker, PackedBits, Push};
+use crate::traits::shift::Shift;
 
 impl BitPacker for i8
 {
@@ -46,3 +47,21 @@ macro_rules! impl_for {
 impl_for!(
     i16:u16 i32:u32 i64:u64 i128:u128
 );
+
+/*impl BitPacker for i16
+{
+    fn add_to_packed_bits(&self, bits: &mut PackedBits)
+    {
+        let val = UnsignedSigned::<i16, u16> { unsigned: *self };
+        unsafe {
+            bits.push(&val.signed);
+        }
+    }
+
+    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits) {
+        let val = UnsignedSigned::<i16, u16> { signed: bits.shift() };
+        unsafe {
+            *self = val.unsigned;
+        }
+    }
+}*/
