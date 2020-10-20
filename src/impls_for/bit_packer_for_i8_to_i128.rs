@@ -33,9 +33,7 @@ macro_rules! impl_for {
                 }
 
                 fn extract_from_packed_bits(&mut self, bits: &mut PackedBits) {
-                    let mut val: $u = 0;
-                    (&mut val).extract_from_packed_bits(bits);
-                    let val = UnsignedSigned::<$i, $u> { signed: val };
+                    let val = UnsignedSigned::<$i, $u> { signed:  bits.shift() };
                     unsafe {
                         *self = val.unsigned;
                     }
