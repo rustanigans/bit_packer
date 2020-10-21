@@ -19,3 +19,5 @@ pub use traits::range_def::RangeDef;
 pub use traits::bit_packer::BitPacker;
 pub use traits::shift::Shift;
 use traits::num_byte_converter::NumByteConverter;
+pub(crate) use traits::box_bit_packer::BoxBitPacker;
+pub use impls_for::from_bit_packer_for_box;
