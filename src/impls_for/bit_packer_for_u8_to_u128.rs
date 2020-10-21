@@ -29,7 +29,7 @@ macro_rules! impl_for{
                     unsafe {
                         let bytes = bits.take_bits(BIT_SIZE);
                         debug_assert_eq!(BYTE_SIZE, bytes.len());
-                        let bytes = *([0..BYTE_SIZE].as_ptr() as *const [u8; BYTE_SIZE]) as [u8; BYTE_SIZE];
+                        let bytes = *(bytes[0..BYTE_SIZE].as_ptr() as *const [u8; BYTE_SIZE]) as [u8; BYTE_SIZE];
                         *self = $i::from_be_bytes(bytes);
                     }
                 }
