@@ -1,7 +1,5 @@
 use crate::{BitPacker, PackedBits};
 
-// TODO Tests required
-
 impl BitPacker for u8
 {
     fn add_to_packed_bits(&self, bits: &mut PackedBits) { bits.add_byte(*self); }
