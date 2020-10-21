@@ -18,3 +18,4 @@ pub use traits::push::Push;
 pub use traits::range_def::RangeDef;
 pub use traits::bit_packer::BitPacker;
 pub use traits::shift::Shift;
+use traits::num_byte_converter::NumByteConverter;

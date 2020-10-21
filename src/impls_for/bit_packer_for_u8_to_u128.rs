@@ -1,4 +1,4 @@
-use crate::{BitPacker, PackedBits};
+use crate::{BitPacker, PackedBits, NumByteConverter};
 
 impl BitPacker for u8
 {
@@ -12,11 +12,7 @@ macro_rules! impl_for{
         $(
             impl BitPacker for $i {
                 fn add_to_packed_bits(&self, bits: &mut PackedBits) {
-                    let mut be_bytes = self.to_be_bytes();
-                    bits.append(&mut unsafe {
-                        Vec::from_raw_parts(
-                            be_bytes.as_mut_ptr(), $n, $n)
-                    },0);
+                    bits.append(&mut self.into_be_byte_vec(),0);
                 }
 
                 fn extract_from_packed_bits(&mut self, bits: &mut PackedBits)
