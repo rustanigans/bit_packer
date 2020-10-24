@@ -8,7 +8,7 @@ impl BitPacker for Vec<Box<dyn BitPacker>> {
         }
     }
 
-    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits)
+    fn extract_from_packed_bits(&mut self, _bits: &mut PackedBits)
     {
         panic!("Cannot extract Vec<Box<dyn BitPacker>> automatically");
     }
