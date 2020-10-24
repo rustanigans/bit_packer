@@ -1,1 +1,0 @@
-pub type Range<T,U> = (T,U);

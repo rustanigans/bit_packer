@@ -4,13 +4,13 @@ mod impl_range_def;
 
 pub struct RangeDefinition<T>
 {
-    pub(crate) min: T,
+    min: T,
 
     // Only need this for checks
     #[cfg(debug_assertions)]
-    pub(crate) max: T,
+    max: T,
 
-    pub(crate) zeros: u32,
+    zeros: u32,
 }
 
 

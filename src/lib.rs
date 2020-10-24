@@ -17,6 +17,7 @@ pub use traits::push::Push;
 pub use traits::range_def::RangeDef;
 pub use traits::bit_packer::BitPacker;
 pub use traits::shift::Shift;
+pub use new_types::packed_range::PackedRange;
 use traits::num_byte_converter::NumByteConverter;
 use traits::box_bit_packer::BoxBitPacker;
 use unions::UnsignedSigned;
