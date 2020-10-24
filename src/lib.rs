@@ -12,12 +12,11 @@ mod tests;
 
 pub use structs::no_bits::NoBits;
 pub use structs::packed_bits::PackedBits;
-pub use structs::uint_range_def::UIntRangeDef;
-pub use structs::int_range_def::IntRangeDef;
+pub use structs::range_definition::RangeDefinition;
 pub use traits::push::Push;
 pub use traits::range_def::RangeDef;
 pub use traits::bit_packer::BitPacker;
 pub use traits::shift::Shift;
 use traits::num_byte_converter::NumByteConverter;
 use traits::box_bit_packer::BoxBitPacker;
-pub use impls_for::from_bit_packer_for_box;
+use unions::UnsignedSigned;
