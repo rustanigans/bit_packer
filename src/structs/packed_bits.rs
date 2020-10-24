@@ -1,10 +1,12 @@
-use crate::utils::{shift_left::shift_left, shift_right::shift_right};
-use crate::BitPacker;
+use crate::{
+    utils::{shift_left::shift_left, shift_right::shift_right}
+};
 
 pub mod impl_from_bytes;
 pub mod impl_from_bytes_and_trailing_zeros_tuple;
 pub mod impl_push;
 pub mod impl_shift;
+pub mod impl_default;
 
 pub struct PackedBits
 {
@@ -14,17 +16,9 @@ pub struct PackedBits
 
 impl PackedBits
 {
-    // TODO Default Impl
-    pub fn new() -> Self
+    pub fn swap_empty(&mut self) -> PackedBits
     {
-        PackedBits {
-            trailing_zeros: 0,
-            bytes: vec![],
-        }
-    }
-
-    pub fn swap_empty(&mut self) -> PackedBits {
-        let mut n = PackedBits::new();
+        let mut n = PackedBits::default();
         std::mem::swap(&mut n, self);
         n
     }
@@ -45,10 +39,7 @@ impl PackedBits
         }
     }
 
-    pub fn into_bytes(self) -> Vec<u8>
-    {
-        self.bytes
-    }
+    pub fn into_bytes(self) -> Vec<u8> { self.bytes }
 
     pub fn trailing_zeros(&self) -> usize { self.trailing_zeros }
 
@@ -72,7 +63,7 @@ impl PackedBits
             return;
         }
 
-        trailing_zeros = shift_right(bytes, 8-self.trailing_zeros, trailing_zeros);
+        trailing_zeros = shift_right(bytes, 8 - self.trailing_zeros, trailing_zeros);
 
         let (trim, tz) = shift_left(bytes, 8, trailing_zeros);
         self.trailing_zeros = tz;
@@ -83,7 +74,8 @@ impl PackedBits
         self.bytes.append(bytes);
     }
 
-    pub fn take_bits(&mut self, count: usize) -> Vec<u8> {
+    pub fn take_bits(&mut self, count: usize) -> Vec<u8>
+    {
         let whole_bytes = count / 8;
         let mut bytes = self.bytes.split_off(whole_bytes);
         std::mem::swap(&mut self.bytes, &mut bytes);
@@ -94,7 +86,7 @@ impl PackedBits
         }
         let (mut trim, tz) = shift_left(&mut self.bytes, leftover, self.trailing_zeros);
         self.trailing_zeros = tz;
-        trim = trim << 8-leftover;
+        trim = trim << 8 - leftover;
         bytes.push(trim);
         bytes
     }

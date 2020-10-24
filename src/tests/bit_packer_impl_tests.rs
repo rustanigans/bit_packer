@@ -9,7 +9,7 @@ macro_rules! test_for
             #[allow(clippy::float_cmp)]
             fn $n()
             {
-                let mut pb = PackedBits::new();
+                let mut pb = PackedBits::default();
                 let test_val: $n = $initial;
 
                 test_val.add_to_packed_bits(&mut pb);
