@@ -1,6 +1,6 @@
 use crate::{PackedBits};
 
-pub trait BitPacker {
+pub trait BitPacker: Send {
     fn add_to_packed_bits(&self, bits: &mut PackedBits);
     fn extract_from_packed_bits(&mut self, bits: &mut PackedBits);
 
