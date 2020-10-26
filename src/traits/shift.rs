@@ -1,6 +1,6 @@
 use crate::BitPacker;
 
-pub trait Shift {
-
+pub trait Shift:Send
+{
     fn shift(&mut self, val: &mut dyn BitPacker);
 }
