@@ -1,7 +1,5 @@
-use super::{
-    range_definition_helpers::{get_u_from_pb, get_vec_from_u},
-    *,
-};
+use super::{range_definition_helpers::{get_u_from_pb, get_vec_from_u},
+            *};
 
 #[cfg(test)]
 mod tests

@@ -1,4 +1,4 @@
-use crate::{PackedBits, BitPacker};
+use crate::{BitPacker, PackedBits};
 
 macro_rules! test_for
 {

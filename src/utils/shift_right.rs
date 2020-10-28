@@ -1,4 +1,5 @@
-pub(crate) fn shift_right(bytes: &mut Vec<u8>, mut count: usize, mut trailing_zeros: usize) -> usize
+pub(crate) fn shift_right(bytes: &mut Vec<u8>, mut count: usize, mut trailing_zeros: usize)
+                          -> usize
 {
     if count == 0
     {
@@ -24,7 +25,7 @@ pub(crate) fn shift_right(bytes: &mut Vec<u8>, mut count: usize, mut trailing_ze
         bytes.push(0);
     }
 
-    trailing_zeros = 8 - count + trailing_zeros;   //  (count as isize - trailing_zeros as isize).abs() as usize;
+    trailing_zeros = 8 - count + trailing_zeros; //  (count as isize - trailing_zeros as isize).abs() as usize;
 
     let mut trimmed = 0;
 

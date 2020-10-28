@@ -1,9 +1,11 @@
 use crate::{BitPacker, PackedBits, Push};
 
-impl BitPacker for Vec<Box<dyn BitPacker>> {
+impl BitPacker for Vec<Box<dyn BitPacker>>
+{
     fn add_to_packed_bits(&self, bits: &mut PackedBits)
     {
-        for item in self.iter() {
+        for item in self.iter()
+        {
             bits.push(item);
         }
     }

@@ -1,5 +1,4 @@
-use crate::{BitPacker, PackedBits, Push, Shift};
-use crate::unions::FloatUInt;
+use crate::{unions::FloatUInt, BitPacker, PackedBits, Push, Shift};
 
 macro_rules! impl_for
 {

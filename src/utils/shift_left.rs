@@ -1,8 +1,9 @@
-
-
-pub(crate) fn shift_left(bytes: &mut Vec<u8>, mut count: usize, mut trailing_zeros:usize) -> (u8, usize)
+pub(crate) fn shift_left(bytes: &mut Vec<u8>,
+                         mut count: usize,
+                         mut trailing_zeros: usize)
+                         -> (u8, usize)
 {
-    debug_assert!(trailing_zeros<8);
+    debug_assert!(trailing_zeros < 8);
     debug_assert!(bytes.len() * 8 >= count);
 
     // Early out if count is zero
@@ -11,7 +12,7 @@ pub(crate) fn shift_left(bytes: &mut Vec<u8>, mut count: usize, mut trailing_zer
         return (0, 0);
     }
 
-    let mut removed_bytes:Vec<u8>;
+    let mut removed_bytes: Vec<u8>;
 
     // remove whole bytes
     if count >= 8
@@ -32,7 +33,7 @@ pub(crate) fn shift_left(bytes: &mut Vec<u8>, mut count: usize, mut trailing_zer
         return (removed_bytes.pop().unwrap(), trailing_zeros);
     }
 
-    trailing_zeros = trailing_zeros + count;   // 17 bits, with 7 tz, shifted left 5 = 12 tz
+    trailing_zeros = trailing_zeros + count; // 17 bits, with 7 tz, shifted left 5 = 12 tz
 
     // var to store the trimmed bits
     let mut trimmed = 0;

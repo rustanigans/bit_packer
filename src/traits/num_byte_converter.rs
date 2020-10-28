@@ -1,5 +1,5 @@
-
-pub(crate) trait NumByteConverter<T:Copy> {
+pub(crate) trait NumByteConverter<T: Copy>
+{
     const BIT_SIZE: usize = std::mem::size_of::<T>() * 8;
     const BYTE_SIZE: usize = std::mem::size_of::<T>();
     fn into_be_byte_vec(self) -> Vec<u8>;

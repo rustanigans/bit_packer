@@ -2,5 +2,8 @@ use super::*;
 
 impl Default for NoBits
 {
-    fn default() -> Self { NoBits {} }
+    fn default() -> Self
+    {
+        NoBits {}
+    }
 }

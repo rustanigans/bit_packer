@@ -1,10 +1,16 @@
-use crate::{BitPacker, PackedBits, NumByteConverter};
+use crate::{BitPacker, NumByteConverter, PackedBits};
 
 impl BitPacker for u8
 {
-    fn add_to_packed_bits(&self, bits: &mut PackedBits) { bits.add_byte(*self); }
+    fn add_to_packed_bits(&self, bits: &mut PackedBits)
+    {
+        bits.add_byte(*self);
+    }
 
-    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits) { *self = bits.take_byte() }
+    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits)
+    {
+        *self = bits.take_byte()
+    }
 }
 
 macro_rules! impl_for{

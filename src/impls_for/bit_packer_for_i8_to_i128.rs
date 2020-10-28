@@ -1,5 +1,4 @@
-use crate::{unions::UnsignedSigned, BitPacker, PackedBits, Push};
-use crate::traits::shift::Shift;
+use crate::{traits::shift::Shift, unions::UnsignedSigned, BitPacker, PackedBits, Push};
 
 impl BitPacker for i8
 {
@@ -11,7 +10,8 @@ impl BitPacker for i8
         }
     }
 
-    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits) {
+    fn extract_from_packed_bits(&mut self, bits: &mut PackedBits)
+    {
         let val = UnsignedSigned::<i8, u8> { signed: bits.take_byte() };
         unsafe {
             *self = val.unsigned;

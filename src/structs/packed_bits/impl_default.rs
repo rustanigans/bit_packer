@@ -4,9 +4,7 @@ impl Default for PackedBits
 {
     fn default() -> Self
     {
-        PackedBits {
-            trailing_zeros: 0,
-            bytes: vec![],
-        }
+        PackedBits { trailing_zeros: 0,
+                     bytes:          vec![] }
     }
 }

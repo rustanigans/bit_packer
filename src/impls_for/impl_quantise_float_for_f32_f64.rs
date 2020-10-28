@@ -78,6 +78,6 @@ mod tests
     fn quantise_when_is_nan_should_panic()
     {
         let f = f32::NAN;
-        let _:u32 = f.quantise(10);
+        let _: u32 = f.quantise(10);
     }
 }

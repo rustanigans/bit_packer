@@ -1,1 +1,3 @@
-pub(crate) trait UIntRange{}
+pub(crate) trait UIntRange
+{
+}

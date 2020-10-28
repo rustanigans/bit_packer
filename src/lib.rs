@@ -1,24 +1,16 @@
-
-
-mod structs;
 mod impls_for;
 mod new_types;
+mod structs;
 mod traits;
-mod utils;
 mod unions;
+mod utils;
 
 #[cfg(test)]
 mod tests;
 
-pub use structs::no_bits::NoBits;
-pub use structs::packed_bits::PackedBits;
-pub use structs::range_definition::RangeDefinition;
-pub use traits::push::Push;
-pub use traits::range_def::RangeDef;
-pub use traits::bit_packer::BitPacker;
-pub use traits::shift::Shift;
-pub use traits::quantise_float::QuantiseFloat;
 pub use new_types::packed_range::PackedRange;
-use traits::num_byte_converter::NumByteConverter;
-use traits::box_bit_packer::BoxBitPacker;
+pub use structs::{no_bits::NoBits, packed_bits::PackedBits, range_definition::RangeDefinition};
+pub use traits::{bit_packer::BitPacker, push::Push, quantise_float::QuantiseFloat,
+                 range_def::RangeDef, shift::Shift};
+use traits::{box_bit_packer::BoxBitPacker, num_byte_converter::NumByteConverter};
 use unions::UnsignedSigned;

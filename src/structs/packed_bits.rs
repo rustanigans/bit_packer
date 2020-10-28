@@ -1,12 +1,10 @@
-use crate::{
-    utils::{shift_left::shift_left, shift_right::shift_right}
-};
+use crate::utils::{shift_left::shift_left, shift_right::shift_right};
 
+pub mod impl_default;
 pub mod impl_from_bytes;
 pub mod impl_from_bytes_and_trailing_zeros_tuple;
 pub mod impl_push;
 pub mod impl_shift;
-pub mod impl_default;
 
 #[cfg(test)]
 mod tests;
@@ -14,7 +12,7 @@ mod tests;
 pub struct PackedBits
 {
     trailing_zeros: usize,
-    bytes: Vec<u8>,
+    bytes:          Vec<u8>
 }
 
 impl PackedBits
@@ -28,28 +26,40 @@ impl PackedBits
 
     pub fn from_bytes_and_tz(bytes: Vec<u8>, trailing_zeros: usize) -> Self
     {
-        PackedBits {
-            trailing_zeros,
-            bytes,
-        }
+        PackedBits { trailing_zeros,
+                     bytes }
     }
 
     pub fn from_bytes(bytes: Vec<u8>) -> Self
     {
-        PackedBits {
-            trailing_zeros: 0,
-            bytes,
-        }
+        PackedBits { trailing_zeros: 0,
+                     bytes }
     }
 
-    pub fn bit_len(&self) -> usize { self.bytes.len() * 8 - self.trailing_zeros }
-    pub fn into_bytes(self) -> Vec<u8> { self.bytes }
+    pub fn bit_len(&self) -> usize
+    {
+        self.bytes.len() * 8 - self.trailing_zeros
+    }
 
-    pub fn trailing_zeros(&self) -> usize { self.trailing_zeros }
+    pub fn into_bytes(self) -> Vec<u8>
+    {
+        self.bytes
+    }
 
-    pub fn bytes(&self) -> &[u8] { &self.bytes[..] }
+    pub fn trailing_zeros(&self) -> usize
+    {
+        self.trailing_zeros
+    }
 
-    pub fn add_byte(&mut self, byte: u8) { self.append(&mut vec![byte], 0) }
+    pub fn bytes(&self) -> &[u8]
+    {
+        &self.bytes[..]
+    }
+
+    pub fn add_byte(&mut self, byte: u8)
+    {
+        self.append(&mut vec![byte], 0)
+    }
 
     pub fn take_byte(&mut self) -> u8
     {
