@@ -64,6 +64,8 @@ impl PackedBits
             return;
         }
 
+        debug_assert!(!self.bytes.is_empty(), "add_byte called with empty bytes even though trailing zeros was non-zero");
+
         let left = byte >> (8 - self.trailing_zeros);
         let right = byte << self.trailing_zeros;
 
