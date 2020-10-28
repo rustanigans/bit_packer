@@ -51,7 +51,14 @@ impl PackedBits
 
     pub fn add_byte(&mut self, byte: u8) { self.append(&mut vec![byte], 0) }
 
-    pub fn take_byte(&mut self) -> u8 { self.bytes.remove(0) }
+    pub fn take_byte(&mut self) -> u8
+    {
+        if self.bytes.is_empty()
+        {
+            panic!("Tried to take byte on an empty PackedBits");
+        }
+        self.bytes.remove(0)
+    }
 
     pub fn append(&mut self, bytes: &mut Vec<u8>, mut trailing_zeros: usize)
     {
