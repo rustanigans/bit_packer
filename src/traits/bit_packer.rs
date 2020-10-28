@@ -5,11 +5,11 @@ pub trait BitPacker: Send
     fn add_to_packed_bits(&self, bits: &mut PackedBits);
     fn extract_from_packed_bits(&mut self, bits: &mut PackedBits);
 
-    fn pack(&self) -> Vec<u8>
+    fn pack(&self) -> PackedBits
     {
         let mut pb = PackedBits::default();
         self.add_to_packed_bits(&mut pb);
-        pb.into_bytes()
+        pb
     }
 
     fn unpack(&mut self, mut bytes: Vec<u8>)
