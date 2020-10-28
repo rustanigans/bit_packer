@@ -47,7 +47,7 @@ impl PackedBits
 
     pub fn bytes(&self) -> &[u8] { &self.bytes[..] }
 
-    pub fn add_byte(&mut self, byte: u8) { self.bytes.push(byte); }
+    pub fn add_byte(&mut self, byte: u8) { self.append(&mut vec![byte], 0) }
 
     pub fn take_byte(&mut self) -> u8 { self.bytes.remove(0) }
 
