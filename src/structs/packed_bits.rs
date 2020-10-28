@@ -58,7 +58,17 @@ impl PackedBits
 
     pub fn add_byte(&mut self, byte: u8)
     {
-        self.append(&mut vec![byte], 0)
+        if self.trailing_zeros == 0
+        {
+            self.bytes.push(byte);
+            return;
+        }
+
+        let left = byte >> (8 - self.trailing_zeros);
+        let right = byte << self.trailing_zeros;
+
+        *self.bytes.last_mut().unwrap() |= left;
+        self.bytes.push(right);
     }
 
     pub fn take_byte(&mut self) -> u8
