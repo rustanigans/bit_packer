@@ -7,7 +7,7 @@ pub(crate) fn shift_left(bytes: &mut Vec<u8>,
     debug_assert!(bytes.len() * 8 >= count);
 
     // Early out if count is zero
-    if count == 0 || bytes.len() == 0
+    if count == 0 || bytes.is_empty()
     {
         return (0, 0);
     }
@@ -25,7 +25,7 @@ pub(crate) fn shift_left(bytes: &mut Vec<u8>,
         removed_bytes = vec![]
     }
 
-    count = count % 8;
+    count %= 8;
 
     // Early out if no further shifting is required
     if count == 0
@@ -33,7 +33,7 @@ pub(crate) fn shift_left(bytes: &mut Vec<u8>,
         return (removed_bytes.pop().unwrap(), trailing_zeros);
     }
 
-    trailing_zeros = trailing_zeros + count; // 17 bits, with 7 tz, shifted left 5 = 12 tz
+    trailing_zeros += count; // 17 bits, with 7 tz, shifted left 5 = 12 tz
 
     // var to store the trimmed bits
     let mut trimmed = 0;

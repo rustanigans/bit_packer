@@ -83,7 +83,7 @@ impl PackedBits
     pub fn append(&mut self, bytes: &mut Vec<u8>, mut trailing_zeros: usize)
     {
         let len = self.bytes.len();
-        if bytes.len() == 0
+        if bytes.is_empty()
         {
             return;
         }
@@ -100,7 +100,7 @@ impl PackedBits
         self.trailing_zeros = tz;
         unsafe {
             let last = self.bytes.get_unchecked_mut(len - 1);
-            *last = *last | trim;
+            *last |= trim;
         }
         self.bytes.append(bytes);
     }
@@ -117,7 +117,7 @@ impl PackedBits
         }
         let (mut trim, tz) = shift_left(&mut self.bytes, leftover, self.trailing_zeros);
         self.trailing_zeros = tz;
-        trim = trim << 8 - leftover;
+        trim <<= 8 - leftover;
         bytes.push(trim);
         bytes
     }

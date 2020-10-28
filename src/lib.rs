@@ -1,3 +1,5 @@
+#![allow(clippy::suspicious_else_formatting)]
+
 mod impls_for;
 mod new_types;
 mod structs;
