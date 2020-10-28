@@ -39,6 +39,8 @@ impl PackedBits
         }
     }
 
+    pub fn bit_len(&self) -> usize { self.bytes.len() * 8 - self.trailing_zeros }
+
     pub fn into_bytes(self) -> Vec<u8> { self.bytes }
 
     pub fn trailing_zeros(&self) -> usize { self.trailing_zeros }
