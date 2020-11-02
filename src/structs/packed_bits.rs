@@ -37,12 +37,18 @@ impl PackedBits
                      bytes }
     }
 
+    pub fn take_front<T: Send + BitPacker>(&mut self, val: &mut T)
+    {
+        val.extract_from_packed_bits(self)
+    }
+
     pub fn push_ranged_value<T: Send + Copy, R: RangeDef<T>>(&mut self, val: T, range_def: &R)
     {
         range_def.pack(val, self);
     }
 
-    pub fn take_ranged_value<T: Default + Send + Copy, R: RangeDef<T>>(&mut self, val: &mut T,
+    pub fn take_ranged_value<T: Default + Send + Copy, R: RangeDef<T>>(&mut self,
+                                                                       val: &mut T,
                                                                        range_def: &R)
     {
         range_def.restore(val, self);
