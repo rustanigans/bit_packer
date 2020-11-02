@@ -10,7 +10,7 @@ mod utils;
 #[cfg(test)]
 mod tests;
 
-pub use new_types::packed_range::PackedRange;
+pub use new_types::packed_range::{PackedRange, PackedRangeMut};
 pub use structs::{no_bits::NoBits, packed_bits::PackedBits, range_definition::RangeDefinition};
 pub use traits::{bit_packer::BitPacker, push::Push, quantise_float::QuantiseFloat,
                  range_def::RangeDef, shift::Shift};
