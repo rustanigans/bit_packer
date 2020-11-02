@@ -1,6 +1,6 @@
 use crate::PackedBits;
 
-pub trait RangeDef<T>
+pub trait RangeDef<T>:Send + Sync
 {
     fn new(min: T, max: T) -> Self
         where Self: Sized;
