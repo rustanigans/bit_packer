@@ -1,4 +1,5 @@
-use crate::utils::{shift_left::shift_left, shift_right::shift_right};
+use crate::{utils::{shift_left::shift_left, shift_right::shift_right},
+            BitPacker, Push, RangeDef};
 
 pub mod impl_default;
 pub mod impl_from_bytes;
@@ -36,6 +37,17 @@ impl PackedBits
                      bytes }
     }
 
+    pub fn push_ranged_value<T: Send + Copy, R: RangeDef<T>>(&mut self, val: T, range_def: &R)
+    {
+        range_def.pack(val, self);
+    }
+
+    pub fn take_ranged_value<T: Default + Send + Copy, R: RangeDef<T>>(&mut self, val: &mut T,
+                                                                       range_def: &R)
+    {
+        range_def.restore(val, self);
+    }
+
     pub fn bit_len(&self) -> usize
     {
         self.bytes.len() * 8 - self.trailing_zeros
@@ -64,7 +76,8 @@ impl PackedBits
             return;
         }
 
-        debug_assert!(!self.bytes.is_empty(), "add_byte called with empty bytes even though trailing zeros was non-zero");
+        debug_assert!(!self.bytes.is_empty(),
+                      "add_byte called with empty bytes even though trailing zeros was non-zero");
 
         let left = byte >> (8 - self.trailing_zeros);
         let right = byte << self.trailing_zeros;
